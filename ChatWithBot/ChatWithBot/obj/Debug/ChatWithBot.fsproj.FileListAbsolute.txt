@@ -1,0 +1,10 @@
+c:\users\анастасия\documents\visual studio 2012\Projects\ChatWithBot\ChatWithBot\bin\Debug\ChatWithBot.exe.config
+c:\users\анастасия\documents\visual studio 2012\Projects\ChatWithBot\ChatWithBot\bin\Debug\ChatWithBot.XML
+c:\users\анастасия\documents\visual studio 2012\Projects\ChatWithBot\ChatWithBot\bin\Debug\ChatWithBot.exe
+c:\users\анастасия\documents\visual studio 2012\Projects\ChatWithBot\ChatWithBot\bin\Debug\ChatWithBot.pdb
+c:\users\анастасия\documents\visual studio 2012\Projects\ChatWithBot\ChatWithBot\bin\Debug\AIMLbot.dll
+c:\users\анастасия\documents\visual studio 2012\Projects\ChatWithBot\ChatWithBot\bin\Debug\FSharp.Core.dll
+c:\users\анастасия\documents\visual studio 2012\Projects\ChatWithBot\ChatWithBot\bin\Debug\FSharp.Core.xml
+c:\users\анастасия\documents\visual studio 2012\Projects\ChatWithBot\ChatWithBot\obj\Debug\ChatWithBot.exe
+c:\users\анастасия\documents\visual studio 2012\Projects\ChatWithBot\ChatWithBot\obj\Debug\ChatWithBot.pdb
+C:\Users\анастасия\documents\visual studio 2012\Projects\ChatWithBot\ChatWithBot\obj\Debug\ChatWithBot.fsprojResolveAssemblyReference.cache
