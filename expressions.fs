@@ -18,7 +18,7 @@ let rec calc expr =
         | Div (Const x, Const y) -> Const (x / y)
         | Add (x, Const 0) | Add (Const 0, x) | Sub (x, Const 0) -> x
         | Mul (x, Const 1) | Mul (Const 1, x) | Div (x, Const 1) -> x
-        | Mul (x, Const 0) | Mul (Const 0, x) | Div (x, Const 1) -> Const 0
+        | Mul (x, Const 0) | Mul (Const 0, x) | Div (0, x) -> Const 0
         | Sub (Var x, Var y) -> if x = y then Const 0
                                 else expr
         | Add (x, y) -> Add (calc x , calc y)
