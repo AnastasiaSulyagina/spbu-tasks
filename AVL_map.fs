@@ -161,9 +161,3 @@ type Map<'Key, 'Value  when 'Key: comparison> (tree:Tree<'Key, 'Value>) =
         member this.GetEnumerator() = this.getEnumerator()
     interface IEnumerable with
         member this.GetEnumerator() = this.getEnumerator() :> IEnumerator
-
-let m = new Map<_,_>(Empty)
-let m1 = m.Add 1 1
-let m2 = m1.Add 2 2
-let m3 = m2.Add 3 3
-printfn "%A" m3.Count
