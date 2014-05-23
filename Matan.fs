@@ -9,8 +9,18 @@ type Human (name:string) =
     member this.Skill = skill
     member this.Health = health
     member this.Name = name
-    member this.ChangeSkill (value:int) = skill <- (if this.Skill + value >= 0 && this.Skill + value <= 10 then this.Skill + value else 0)
-    member this.ChangeHealth (value:int) = health <- (if this.Health + value >= 0 && this.Health + value <= 10 then this.Health + value else 0) 
+    member this.ChangeSkill (value:int) = 
+        skill <- (if this.Skill + value >= 0 && this.Skill + value <= 10 
+        then this.Skill + value 
+        else if this.Skill + value < 0 then 0
+        else if value > 10 this.Skill + value 
+        else 10)
+    member this.ChangeHealth (value:int) = 
+        health <- (if this.Health + value >= 0 && this.Health + value <= 10 
+                   then this.Health + value 
+                   else if this.Health + value < 0 then 0
+                   else if value > 10 this.Health + value 
+                   else 10) 
 
 type Student (name:string) = 
     inherit Human(name)
@@ -22,11 +32,13 @@ type Tarasov (name:string) =
     inherit Human(name)
     let mutable mood = 1
     member this.Mood = mood    
-    member this.GODMODE() = this.ChangeSkill(100000000)
-                            this.ChangeHealth(100000000)
-                            mood <- mood + 1
-    member this.Mock (student:Student) = student.ChangeSkill (-this.Mood)
-                                         this.GODMODE ()
+    member this.GODMODE() = 
+        this.ChangeSkill(100000000)
+        this.ChangeHealth(100000000)
+        mood <- mood + 1
+    member this.Mock (student:Student) = 
+        student.ChangeSkill (-this.Mood)
+        this.GODMODE ()
 
 //monsters
 
@@ -37,22 +49,26 @@ type Monster (power:int) =
 
 type Integral (power:int) =
     inherit Monster(power)
-    member this.Integrate (human:Human) = human.ChangeSkill (1)
-                                          if human.Skill > this.Power then human.ChangeHealth (this.Power)
-                                                                           this.LosePower()
-                                          else human.ChangeHealth (-this.Power)
+    member this.Integrate (human:Human) = 
+        human.ChangeSkill (1)
+        if human.Skill > this.Power then human.ChangeHealth (this.Power)
+                                         this.LosePower()
+        else human.ChangeHealth (-this.Power)
                                                    
 type GreenMan (power:int) =
     inherit Monster(power)
-    member this.CheckForArmy (student:Student) = if student.Skill = 0 then student.ChangeStatus ("soldier")
-                                                                           student.ChangeHealth (10 - student.Health)  
-                                                 else if student.Health = 0 then student.ChangeStatus ("dead")    
+    member this.CheckForArmy (student:Student) = 
+        if student.Skill = 0 then student.ChangeStatus ("soldier")
+                                  student.ChangeHealth (10 - student.Health)  
+        else if student.Health = 0 then student.ChangeStatus ("dead")    
 
 type Hedgehog (power:int) =
     inherit Monster(power)
-    member this.GetHeadKick (human:Human) = human.ChangeSkill (this.Power)
-                                            this.LosePower()
-    member this.LaughAt (student:Student) = student.ChangeSkill (-this.Power)
+    member this.GetHeadKick (human:Human) = 
+        human.ChangeSkill (this.Power)
+        this.LosePower()
+    member this.LaughAt (student:Student) = 
+        student.ChangeSkill (-this.Power)
        
 type HungryHedgehog (power:int) =
     inherit Hedgehog(power)
