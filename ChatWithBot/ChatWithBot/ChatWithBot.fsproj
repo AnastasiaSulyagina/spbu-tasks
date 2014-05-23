@@ -60,6 +60,13 @@
     <Reference Include="System.Numerics" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
+  <PropertyGroup>
+    <PostBuildEvent>mkdir $(TargetDir)\aiml
+copy /Y $(ProjectDir)\aiml $(TargetDir)\aiml
+mkdir  $(TargetDir)\config
+copy /Y $(ProjectDir)\config $(TargetDir)\config
+</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
