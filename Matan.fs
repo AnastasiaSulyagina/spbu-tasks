@@ -11,10 +11,10 @@ type Human (name:string) =
     member this.Name = name
     member this.ChangeSkill (value:int) = 
         skill <- (if this.Skill + value >= 0 && this.Skill + value <= 10 
-        then this.Skill + value 
-        else if this.Skill + value < 0 then 0
-        else if value > 10 this.Skill + value 
-        else 10)
+                  then this.Skill + value 
+                  else if this.Skill + value < 0 then 0
+                  else if value > 10 this.Skill + value 
+                  else 10)
     member this.ChangeHealth (value:int) = 
         health <- (if this.Health + value >= 0 && this.Health + value <= 10 
                    then this.Health + value 
