@@ -1,5 +1,6 @@
 ﻿ // Anastasia Sulyagina
 // Intersection
+module Intersect
 
 type Set =
     | Point of float * float
