@@ -31,9 +31,9 @@ let rec getLink x =
 
 
 let rec getImg l f =
-    let not check
+    let check = ref false
     let wait() =
-         while !check = false 
+         while not !check 
             do System.Threading.Thread.Sleep(100)
     let x = map'cps getUrl l (fun x -> f (Seq.toList (Seq.distinct (getLink x)))
                                        check := true)
