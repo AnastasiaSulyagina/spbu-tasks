@@ -31,7 +31,7 @@ let rec getLink x =
 
 
 let rec getImg l f =
-    let check = ref false
+    let not check
     let wait() =
          while !check = false 
             do System.Threading.Thread.Sleep(100)
