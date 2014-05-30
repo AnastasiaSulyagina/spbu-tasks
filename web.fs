@@ -4,6 +4,7 @@ module web
 
 open System
 open WebR
+open Map'cps
 
 let imgCount page =
     let rec imgCount' (page : string) (pos : int) =
@@ -13,7 +14,7 @@ let imgCount page =
         else 1 + imgCount' page (x + 1)
     imgCount' page 0
 
-let rec getLink page =
+let rec getLink x =
     let rec getLink' (page : string) (pos : int) =
         if imgCount page < 5 then []
         else
@@ -24,13 +25,21 @@ let rec getLink page =
                 let st = page.IndexOf("src=", x) + 5
                 let fin = page.IndexOf("\"", st)
                 page.Substring(st, fin - st) :: getLink' page (fin)
-    getLink' page 0
+    match x with
+        | [] -> []
+        | hd::tl -> getLink' hd 0 @ getLink tl
+
 
 let rec getImg l f =
-    match l with
-        | [] -> f []
-        | hd :: tl -> getUrl hd (fun x -> getImg tl (fun y -> f (Seq.toList (Seq.distinct ([getLink x] @ y )))))
+    let check = ref false
+    let rec wait() =
+        if !check = false 
+        then System.Threading.Thread.Sleep(100)
+             wait()
+    let x = map'cps getUrl l (fun x -> f (Seq.toList (Seq.distinct (getLink x)))
+                                       check := true)
+    wait()
 
-getImg [ "http://www.google.com/"; "http://www.4pda.ru/"] (printfn "%A")
 
-Console.ReadLine() |> ignore
+getImg [ "http://www.yandex.ru/"; "http://www.4pda.ru/"] (printfn "%A")
+ 
