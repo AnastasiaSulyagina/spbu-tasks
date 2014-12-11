@@ -5,15 +5,28 @@ open NSubstitute
 open FsCheck
 open World
 open cloud
-                   
-let test lum light windSpeed rightCourier rightCreature = 
-    let luminary = new Luminary(lum) :> ILuminary
-    let daylight = new Daylight(light) :> IDaylight
-    let wind = new Wind(windSpeed) :> IWind
-    let magic = new Magic() :> IMagic
-    let cloud = new Cloud (daylight, luminary, wind, magic)
-    let courier, creature = cloud.Create() 
-    (courier = rightCourier && creature.creatureType = rightCreature)
+    
+let test (isShining : bool) (light : DaylightType) (speed : int) (expectedCourier : CourierType) (expectedCreature : CreatureType) =
+    let luminary = Substitute.For<ILuminary>()
+    let wind = Substitute.For<IWind>()
+    let daylight = Substitute.For<IDaylight>()
+    let magic = Substitute.For<IMagic>()
+    let courier = Substitute.For<ICourier>()
+
+    ignore <| luminary.IsShining.Returns(isShining) 
+    ignore <| wind.Speed.Returns(speed)
+    ignore <| daylight.Current.Returns(light)
+    ignore <| magic.CallDaemon().Returns(courier)
+    ignore <| magic.CallStork().Returns(courier)
+
+    let (returnedCourier, returnedCreature) = (new Cloud(daylight, luminary, wind, magic)).Create()
+
+    if expectedCourier = Stork then ignore <| magic.Received().CallStork()
+    else ignore <| magic.Received().CallDaemon()
+    
+    courier.Received().GiveBaby(returnedCreature)
+    (returnedCreature.creatureType, returnedCourier) = (expectedCreature, expectedCourier)
+
         
 
 [<Test>]
@@ -67,17 +80,4 @@ let testNonShineNonWindyNight() = Assert.IsTrue(test false DaylightType.Night 1 
 
 type IntGenerator0_2 = static member Wnd() = Arb.fromGen <| Gen.choose(0, 2)
 type IntGenerator3_10 = static member Wnd() = Arb.fromGen <| Gen.choose(3, 10)
-
-//Последний тест выдает ошибку. Вроде все загружено и правильно, снова не могу понять, что не так. Попробую переставить студию, а то совсем ничего не работает. Может у Вас запустится
-
-//System.IO.FileLoadException : Не удалось загрузить файл или сборку "FSharp.Core, Version=4.3.1.0, 
-//Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" либо одну из их зависимостей. Найденное определение 
-//манифеста сборки не соответствует ссылке на сборку. (Исключение из HRESULT: 0x80131040)
-
-[<Test>]
-let ``with fscheck 1`` () = 
-    let tst (wnd: int) = 
-        test true DaylightType.Morning wnd CourierType.Daemon CreatureType.Puppy
-    Arb.register<IntGenerator3_10>() |> ignore
-    Check.Quick tst
 
