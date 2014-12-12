@@ -21,13 +21,14 @@ let test (isShining : bool) (light : DaylightType) (speed : int) (expectedCourie
 
     let (returnedCourier, returnedCreature) = (new Cloud(daylight, luminary, wind, magic)).Create()
 
-    if expectedCourier = Stork then ignore <| magic.Received().CallStork()
-    else ignore <| magic.Received().CallDaemon()
+    if expectedCourier = Stork then ignore <| magic.Received(1).CallStork()
+                                    ignore <| magic.DidNotReceive().CallDaemon
+    else ignore <| magic.Received(1).CallDaemon()
+         ignore <| magic.DidNotReceive().CallStork()
     
     courier.Received().GiveBaby(returnedCreature)
     (returnedCreature.creatureType, returnedCourier) = (expectedCreature, expectedCourier)
 
-        
 
 [<Test>]
 let testShineWindyMorning() = Assert.IsTrue(test true DaylightType.Morning 10 CourierType.Daemon CreatureType.Puppy)
