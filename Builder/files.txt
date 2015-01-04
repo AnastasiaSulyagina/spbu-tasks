@@ -1,0 +1,2 @@
+Logic.dll
+WindowsFormsApplication1.exe
