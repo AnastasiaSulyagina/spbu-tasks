@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "Contact";
+}
+
+<hgroup class="title">
+    <h1>@ViewBag.Title.</h1>
+    <h2>@ViewBag.Message</h2>
+</hgroup>
+
+<section class="contact">
+    <header>
+        <h3>Ваши билеты: </h3>
+        @if(Request.IsAuthenticated)
+        {
+            <h3>1</h3>            
+            <p>
+                <a href="/Images/ticket.jpg">Распечатать</a>
+            </p>
+
+        }
+        else 
+        { 
+            <h3>0</h3>   
+            <p>
+                <a href="/Account/Register">Зарегистрироваться</a>
+            </p>
+        }
+    </header>
+
+
+</section>
+
+<section class="contact">
+    <header>
+        <h3>Email</h3>
+    </header>
+    <p>
+        <span class="label">Пресс-служба ВКонтакте:</span>
+        <span><a href="mailto:press@vk.com">press@vk.com</a></span>
+    </p>
+    <p>
+        <span class="label">Аккредитация прессы на мероприятие:</span>
+        <span><a href="mailto:event@corp.vk.com">event@corp.vk.com</a></span>
+    </p>
+    <p>
+        <span class="label">По вопросам участия сообществ:</span>
+        <span><a href="mailto:content@corp.vk.com">content@corp.vk.com</a></span>
+    </p>
+    <p>
+    <span class="label">По вопросам спонсорства:</span>
+    <span><a href="mailto:sponsors@corp.vk.com">sponsors@corp.vk.com</a></span>
+    </p>
+</section>
