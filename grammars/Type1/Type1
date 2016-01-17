@@ -1,0 +1,88 @@
+production = []
+
+in_alphabet = ["1", "0", "_"]
+exit_alphabet = ["a", "b", "c", "d", "e", "f", "g", "h"]
+out_alphabet = in_alphabet + exit_alphabet
+z = out_alphabet
+a = in_alphabet
+l_edge = '<'
+r_edge = '>'
+init_state = 'BEGIN'
+final_state = 'halt'
+production += (['{0}->[{1}{2}{3}{4}{5}]\n'.format('s', init_state, l_edge, i, i, r_edge) for i in a])
+production += (['{0}->[{1}{2}{3}{4}][{5}]\n'.format('s', init_state, l_edge, i, i, 's0') for i in a])
+production += (['{0}->[{1}{2}][{3}]\n'.format('s0', i, i, 's0') for i in a])
+production += (['{0}->[{1}{2}{3}]\n'.format('s0', i, i, r_edge) for i in a])
+
+mt = open("mt1.txt", 'r')
+gr = open("gr1.txt", 'w')
+lines = mt.read().split("\n")
+for line in lines:
+    rule_init_state, rule_cur_char, rule_next_char, rule_direction, rule_final_state = line.split(' ')
+    if rule_cur_char == l_edge:
+        production += (['[{0}{1}{2}{3}{4}]->[{5}{6}{7}{8}{9}]\n'.format
+                        (rule_init_state, l_edge, i, j, r_edge, l_edge, rule_final_state, i, j, r_edge) for i in z for j in a])
+        production += (['[{0}{1}{2}{3}]->[{4}{5}{6}{7}]\n'.format
+                        (rule_init_state, l_edge, i, j, l_edge, rule_final_state, i, j) for i in z for j in a])
+    elif rule_cur_char == r_edge:
+        production += (['[{0}{1}{2}{3}{4}]->[{5}{6}{7}{8}{9}]\n'.format
+                        (l_edge, i, j, rule_init_state, r_edge, l_edge, rule_final_state, i, j, r_edge) for i in z for j in a])
+        production += (['[{0}{1}{2}{3}]->[{4}{5}{6}{7}]\n'.format
+                        (i, j, rule_init_state, r_edge, rule_final_state, i, j, r_edge) for i in z for j in a])
+    else:
+        if rule_direction == 'l':
+            production += (['[{0}{1}{2}{3}{4}]->[{5}{6}{7}{8}{9}]\n'.format
+                            (l_edge, rule_init_state, rule_cur_char, i, r_edge, rule_final_state, l_edge, rule_next_char, i, r_edge) for i in a])
+            production += (['[{0}{1}{2}{3}]->[{4}{5}{6}{7}]\n'.format
+                            (l_edge, rule_init_state, rule_cur_char, i, rule_final_state, l_edge, rule_next_char, i) for i in a])
+            production += (['[{0}{1}][{2}{3}{4}]->[{5}{6}{7}][{8}{9}]\n'.format
+                            (i, j, rule_init_state, rule_cur_char, h, rule_final_state, i, j, rule_next_char, h) for i in z for j in a for h in a])
+            production += (['[{0}{1}{2}][{3}{4}{5}]->[{6}{7}{8}{9}][{10}{11}]\n'.format
+                            (l_edge, i, j, rule_init_state, rule_cur_char, h, l_edge, rule_final_state, i, j, rule_next_char, h) for i in z for j in a for h in a])
+            production += (['[{0}{1}][{2}{3}{4}{5}]->[{6}{7}{8}][{9}{10}{11}]\n'.format
+                            (i, j, rule_init_state, rule_cur_char, h, r_edge, rule_final_state, i, j, rule_next_char, h, r_edge) for i in z for j in a for h in a])
+            production += (['[{0}{1}{2}][{3}{4}{5}{6}]->[{7}{8}{9}{10}][{11}{12}{13}]\n'.format
+                            (l_edge, i, j, rule_init_state, rule_cur_char, h, r_edge, l_edge, rule_final_state, i, j, rule_next_char, h, r_edge) for i in z for j in a for h in a])
+        elif rule_direction == 'r':
+            production += (['[{0}{1}{2}{3}{4}]->[{5}{6}{7}{8}{9}]\n'.format
+                            (l_edge, rule_init_state, rule_cur_char, i, r_edge, l_edge, rule_next_char, i, rule_final_state, r_edge) for i in a])
+            production += (['[{0}{1}{2}{3}][{4}{5}]->[{6}{7}{8}][{9}{10}{11}]\n'.format
+                            (l_edge, rule_init_state, rule_cur_char, i, j, h, l_edge, rule_next_char, i, rule_final_state, j, h) for i in a for j in z for h in a])
+            production += (['[{0}{1}{2}{3}][{4}{5}{6}]->[{7}{8}{9}][{10}{11}{12}{13}]\n'.format
+                            (l_edge, rule_init_state, rule_cur_char, i, j, h, r_edge, l_edge, rule_next_char, i, rule_final_state, j, h, r_edge) for i in a for j in z for h in a])
+            production += (['[{0}{1}{2}][{3}{4}]->[{5}{6}][{7}{8}{9}]\n'.format
+                            (rule_init_state, rule_cur_char, i, j, h, rule_next_char, i, rule_final_state, j, h) for i in a for j in z for h in a])
+            production += (['[{0}{1}{2}][{3}{4}{5}]->[{6}{7}][{8}{9}{10}{11}]\n'.format
+                            (rule_init_state, rule_cur_char, i, j, h, r_edge, rule_next_char, i, rule_final_state, j, h, r_edge) for i in a for j in z for h in a])
+            production += (['[{0}{1}{2}{3}]->[{4}{5}{6}{7}]\n'.format
+                            (rule_init_state, rule_cur_char, i, r_edge, rule_next_char, i, rule_final_state, r_edge) for i in a])
+
+production += (['[{0}{1}{2}{3}{4}]->{5}\n'.format
+                (final_state, l_edge, i, j, r_edge, j) for i in z for j in a])
+production += (['[{0}{1}{2}{3}{4}]->{5}\n'.format
+                (l_edge, final_state, i, j, r_edge, j) for i in z for j in a])
+production += (['[{0}{1}{2}{3}{4}]->{5}\n'.format
+                (l_edge, i, j, final_state, r_edge, j) for i in z for j in a])
+
+production += (['[{0}{1}{2}{3}]->{4}\n'.format
+                (final_state, l_edge, i, j, j) for i in z for j in a])
+production += (['[{0}{1}{2}{3}]->{4}\n'.format
+                (l_edge, final_state, i, j, j) for i in z for j in a])
+production += (['[{0}{1}{2}]->{3}\n'.format
+                (final_state, i, j, j) for i in z for j in a])
+
+production += (['[{0}{1}{2}{3}]->{4}\n'.format
+                (final_state, i, j, r_edge, j) for i in z for j in a])
+production += (['[{0}{1}{2}{3}]->{4}\n'.format
+                (i, j, final_state, r_edge, j) for i in z for j in a])
+
+production += (['{0}[{1}{2}]->{3}{4}\n'.format
+                (i, j, h, i, h) for i in a for j in z for h in a])
+production += (['{0}[{1}{2}{3}]->{4}{5}\n'.format
+                (i, j, h, r_edge, i, h) for i in a for j in z for h in a])
+production += (['[{0}{1}]{2}->{3}{4}\n'.format
+                (i, j, h, j, h) for i in z for j in a for h in a])
+production += (['[{0}{1}{2}]{3}->{4}{5}\n'.format
+                (l_edge, i, j, h, j, h) for i in z for j in a for h in a])
+for i in production:
+    gr.write(i)

@@ -1,0 +1,38 @@
+mt_file = open("mt0.txt", 'r')
+gr_file = open("gr0.txt", 'w')
+in_alphabet = ["1", "0", "_"]
+ext_alphabet = ["B", "I", "O", "Z", "X"]
+out_alphabet = in_alphabet + ext_alphabet
+init_state = "MAIN"
+final_state = "halt"
+letters = [(i+j) for i in in_alphabet for j in out_alphabet]
+productions = []
+
+productions += (["[{0}]->[{1}][{2}]\n".format("s", "__", "s")])
+productions += (["[{0}]->[{1}][{2}]\n".format("s", "s", "__")])
+productions += (["[{0}]->[{1}]\n".format("s", "s0")])
+productions += (["[{0}]->[{1}][{2}]\n".format("s0", "s0", "00")])
+productions += (["[{0}]->[{1}][{2}]\n".format("s0", "s0", "11")])
+productions += (["[{0}]->[{1}]\n".format("s0", init_state)])
+
+lines = mt_file.read().split("\n")
+for line in lines:
+    rule_init_state, rule_cur_char, rule_next_char, rule_direction, rule_final_state = line.split(' ')
+    if rule_direction == "l":
+        productions += (["[{0}][{1}][{2}{3}]->[{4}][{5}][{6}{7}]\n".format
+                           (i, rule_init_state, j, rule_cur_char, rule_final_state, i, j, rule_next_char) for i in letters for j in in_alphabet])
+    else:
+        productions += (["[{0}][{1}{2}]->[{3}{4}][{5}]\n".format
+                           (rule_init_state, j, rule_cur_char, j, rule_next_char, rule_final_state) for j in in_alphabet])
+
+productions += (["[{0}]->[{1}]\n".format(final_state, "f")])
+
+for i in letters:
+    prod = "[f]" if i[1] == "_" else "[f]" + i[1] + "[f]"
+    productions += (["[{0}][{1}]->{2}\n".format("f", i, prod)])
+    productions += (["[{0}][{1}]->{2}\n".format(i, "f", prod)])
+
+productions += (["[f]->\n"])
+
+for i in productions:
+    gr_file.write(i)
