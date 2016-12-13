@@ -13,6 +13,7 @@ namespace World.Creatures
             }
             Money = money;
             Color = ConsoleColor.Yellow;
+            Type = HumanType.Coolparent;
         }
 
         public int Money { get; }

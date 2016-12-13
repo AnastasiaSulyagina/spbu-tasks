@@ -45,6 +45,8 @@
   <ItemGroup>
     <Compile Include="Attributes\CoupleAttribute.cs" />
     <Compile Include="Creatures\Book.cs" />
+    <Compile Include="Creatures\HumanType.cs" />
+    <Compile Include="Creatures\IHasMidName.cs" />
     <Compile Include="Creatures\IHasName.cs" />
     <Compile Include="Factories\BotanFactory.cs" />
     <Compile Include="Factories\CoolParentFactory.cs" />

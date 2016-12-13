@@ -17,6 +17,23 @@ namespace World.Services
         private const int EndingLength = 4;
         private static Random Rnd = new Random();
 
+        public static HumanType GetPair(HumanType type)
+        {
+            switch (type)
+            {
+                case HumanType.Student:
+                    return HumanType.Parent;
+                case HumanType.Parent:
+                    return HumanType.Student;
+                case HumanType.Botan:
+                    return HumanType.Coolparent;
+                case HumanType.Coolparent:
+                    return HumanType.Botan;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
         internal static int GenerateMoneyFromMark(double mark) => 
             (int)Math.Pow(10.0, mark);
 

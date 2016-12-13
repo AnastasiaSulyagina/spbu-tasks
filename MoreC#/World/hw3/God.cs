@@ -10,19 +10,17 @@ namespace hw3
     public sealed class God: IGod
     {
         private readonly Random rnd = new Random();
-        private readonly Dictionary<Type, IHumanFactory> humanFactories = new Dictionary<Type, IHumanFactory>()
+        private readonly Dictionary<HumanType, IHumanFactory> humanFactories = 
+            new Dictionary<HumanType, IHumanFactory>()
         {
-            { typeof(Student), new ParentFactory()},
-            { typeof(Parent), new StudentFactory()},
-            { typeof(Botan), new CoolParentFactory()},
-            { typeof(CoolParent), new BotanFactory()}
+            { HumanType.Parent, new ParentFactory()},
+            { HumanType.Student, new StudentFactory()},
+            { HumanType.Coolparent, new CoolParentFactory()},
+            { HumanType.Botan, new BotanFactory()}
         };
-        private readonly List<IHumanFactory> factories;
+        
         private readonly List<Human> humans = new List<Human>();
-        public God()
-        {
-            factories = humanFactories.Values.ToList();
-        }
+        private readonly int factoriesNum = 4;
 
         public Human CreateHuman()
         {
@@ -39,18 +37,18 @@ namespace hw3
 
         public Human CreateHuman(Sex sex)
         {   
-            var human = factories[rnd.Next(factories.Count)].CreateHuman(sex);
+            var human = humanFactories.Values.ToList()[rnd.Next(factoriesNum)].CreateHuman(sex);
             humans.Add(human);
             return human;
         }
 
         public Human CreatePair(Human human)
         {
-            if (human == null || humanFactories[human.GetType()] == null)
+            if (human == null || humanFactories[Generator.GetPair(human.Type)] == null)
             {
                 throw new ArgumentException("Invalid human");
             }
-            Human newHuman = humanFactories[human.GetType()].CreatePair(human);
+            Human newHuman = humanFactories[Generator.GetPair(human.Type)].CreatePair(human);
             humans.Add(newHuman);
             return newHuman;
         }

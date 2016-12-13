@@ -1,5 +1,6 @@
 ﻿using System;
 using World.Attributes;
+using World.Services;
 
 namespace World.Creatures
 {
@@ -17,8 +18,9 @@ namespace World.Creatures
             }
             AverageMark = averageMark;
             Color = ConsoleColor.DarkCyan;
+            Type = HumanType.Botan;
         }
-
+        
         public double AverageMark { get; }
 
         public override void ToConsole()

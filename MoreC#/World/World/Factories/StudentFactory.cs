@@ -4,13 +4,13 @@ using World.Services;
 
 namespace World.Factories
 {
-    public sealed class StudentFactory : IHumanFactory
+    public class StudentFactory : IHumanFactory
     {
-        public Human CreateHuman(Sex sex) =>
+        public virtual Human CreateHuman(Sex sex) =>
             new Student(Randomizer.GenerateRandomYoungHumanAge(), Generator.GenerateName(sex),
                 sex, Generator.GenerateMidName(sex));
 
-        public Human CreatePair(Human parent)
+        public virtual Human CreatePair(Human parent)
         {
             if (parent == null || !(parent is Parent))
             {

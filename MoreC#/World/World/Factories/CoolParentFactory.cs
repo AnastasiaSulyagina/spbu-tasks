@@ -4,19 +4,19 @@ using World.Services;
 
 namespace World.Factories
 {
-    public sealed class CoolParentFactory : IHumanFactory
+    public sealed class CoolParentFactory : ParentFactory
     {
         private const int MaxChildrenNum = 3;
         private const int MaxMoneyNum = 1000000;
 
-        public Human CreateHuman(Sex sex) =>
+        public override Human CreateHuman(Sex sex) =>
             new CoolParent(Randomizer.GenerateRandomParentAge(), 
                            Generator.GenerateName(Sex.Male),
                            Sex.Male,
                            Randomizer.GenerateRandomChildrenNum(MaxChildrenNum),
                            Randomizer.GenerateRandomMoneyNum(MaxMoneyNum));
 
-        public Human CreatePair(Human student)
+        public override Human CreatePair(Human student)
         {
             if (student == null || !(student is Botan))
             {

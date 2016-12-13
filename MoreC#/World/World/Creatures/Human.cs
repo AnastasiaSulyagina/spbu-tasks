@@ -7,7 +7,7 @@ namespace World.Creatures
     {
         public static String ChildNamingMethod = "GiveName";
 
-        public Human(int age, String name, Sex sex)
+        public Human(int age, String name, Sex sex, int childrenNum = 1)
         {
             if ((age < 0) || String.IsNullOrEmpty(name))
             {
@@ -16,11 +16,14 @@ namespace World.Creatures
             Age = age;
             Name = name;
             Sex = sex;
+            ChildrenNum = childrenNum;
         }
 
+        public HumanType Type { get; set; }
         public int Age { get; }
         public String Name { get; }
         public Sex Sex { get; }
+        public int ChildrenNum { get; }
         protected ConsoleColor Color { get; set; }
 
         public String GiveName() => Generator.GenerateName(Sex.Female);

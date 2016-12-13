@@ -10,6 +10,7 @@ namespace World.Creatures
         public SmartGirl(String name, String midName, int age = 0) : base(name, midName, age)
         {
             Color = ConsoleColor.DarkRed;
+            Type = HumanType.SmartGirl;
         }
 
         public override void ToConsole()

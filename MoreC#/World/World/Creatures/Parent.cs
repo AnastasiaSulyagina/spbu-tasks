@@ -4,17 +4,15 @@ namespace World.Creatures
 {
     public class Parent : Human
     {
-        public Parent(int age, String name, Sex sex, int childrenNum) : base(age, name, sex)
+        public Parent(int age, String name, Sex sex, int childrenNum) : base(age, name, sex, childrenNum)
         {
             if (childrenNum < 0)
             {
                 throw new ArgumentException("Invalid children number");
             }
-            ChildrenNum = childrenNum;
             Color = ConsoleColor.Red;
+            Type = HumanType.Parent;
         }
-
-        public int ChildrenNum { get; }
 
         public override void ToConsole()
         {

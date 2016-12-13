@@ -20,21 +20,12 @@ namespace WorldTests
 
 
         [TestMethod]
+        [ExpectedException(typeof(WrongCoupleException))]
         public void NoHomoCouplesTest()
         {
-            try
-            {
-                var girl = girlFactory.CreateHuman();
-                var smartGirl = smartGirlFactory.CreateHuman();
-                var child = god.Couple(girl, smartGirl);
-                Assert.Fail("Homosexual couple impossible");
-            }
-            catch (WrongCoupleException)
-            { }
-            catch (Exception e)
-            {
-                Assert.Fail(e.Message);
-            }
+            var girl = girlFactory.CreateHuman();
+            var smartGirl = smartGirlFactory.CreateHuman();
+            var child = god.Couple(girl, smartGirl);
         }
 
         [TestMethod]

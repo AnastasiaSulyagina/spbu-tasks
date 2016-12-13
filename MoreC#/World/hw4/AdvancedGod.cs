@@ -14,20 +14,28 @@ namespace hw4
         private readonly Random rnd = new Random();
         private readonly int NewbornAge = 0;
         private readonly String WorldProject = "World";
+        private readonly String WorldNameSpace = "Creatures";
 
-        private static readonly Dictionary<Sex, IHumanFactory[]> Humans = 
+        private static readonly Dictionary<Sex, IHumanFactory[]> HumanFactories = 
             new Dictionary<Sex, IHumanFactory[]>() {
                 { Sex.Female,
-                    new IHumanFactory[] { new GirlFactory(), new PrettyGirlFactory(), new SmartGirlFactory() } },
+                    new IHumanFactory[] {
+                        new GirlFactory(),
+                        new PrettyGirlFactory(),
+                        new SmartGirlFactory() } },
                 { Sex.Male,
-                    new IHumanFactory[] { new StudentFactory(), new BotanFactory() } }
+                    new IHumanFactory[] {
+                        new StudentFactory(),
+                        new BotanFactory() } }
             };
-        
+        private int girlFactoriesNum = HumanFactories[Sex.Female].Length;
+        private int manFactoriesNum = HumanFactories[Sex.Male].Length;
+
         public Tuple<Human, Human> GenerateHumansForDating()
         {
             return new Tuple<Human, Human>(
-                Humans[Sex.Female][rnd.Next(Humans[Sex.Female].Count())].CreateHuman(Sex.Female),
-                Humans[Sex.Male][rnd.Next(Humans[Sex.Male].Count())].CreateHuman(Sex.Male));
+                HumanFactories[Sex.Female][rnd.Next(girlFactoriesNum)].CreateHuman(Sex.Female),
+                HumanFactories[Sex.Male][rnd.Next(manFactoriesNum)].CreateHuman(Sex.Male));
         }
 
         public IHasName Couple(Human firstHuman, Human secondHuman)
@@ -40,18 +48,18 @@ namespace hw4
             {
                 throw new WrongCoupleException("Бездуховность!");
             }
-            List <CoupleAttribute> attributes = new List<CoupleAttribute>()
-                { GetAttribute(firstHuman, secondHuman), GetAttribute(secondHuman, firstHuman) };
+            CoupleAttribute firstAttr = GetAttribute(firstHuman, secondHuman);
+            CoupleAttribute secondAttr = GetAttribute(secondHuman, firstHuman);
 
-            if (!Randomizer.CheckIfLikes(attributes[0].Probability) 
-                || !Randomizer.CheckIfLikes(attributes[1].Probability))
+            if (!Randomizer.CheckIfLikes(firstAttr.Probability) 
+                || !Randomizer.CheckIfLikes(secondAttr.Probability))
             {
                 return null;
             }
 
             return MakeChild(
                 // different child types - would throw an exception
-                attributes[0].ChildType == attributes[1].ChildType ? attributes[0].ChildType : null,
+                firstAttr.ChildType == secondAttr.ChildType ? firstAttr.ChildType : null,
                 firstHuman.Sex == Sex.Female ? firstHuman : secondHuman,
                 firstHuman.Sex == Sex.Female ? secondHuman : firstHuman);
         }
@@ -68,20 +76,21 @@ namespace hw4
                 var constructor = type.GetConstructors().FirstOrDefault();
                 if (constructor.GetParameters().Length > 1)
                 {
-                    return (IHasName)Activator.CreateInstance(type, name,
-                        Generator.GenerateMidNameFromParentName(Sex.Female, father.Name), NewbornAge);
+                    return Activator.CreateInstance(type, name,
+                        Generator.GenerateMidNameFromParentName(Sex.Female, father.Name), NewbornAge)
+                        as IHasName;
                 }
 
-                return (IHasName)Activator.CreateInstance(type, name);
+                return Activator.CreateInstance(type, name) as IHasName;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw new NotSupportedException("Child of given type can not be constructed");
+                throw new Exception("Child of given type can not be constructed", e);
             }
         }
 
         private Type GetTypeOfHuman(String type) 
-            => Type.GetType($"{WorldProject}.Creatures." + type + $", {WorldProject}");
+            => Type.GetType($"{WorldProject}.{WorldNameSpace}." + type + $", {WorldProject}");
 
         private String GetChildsName(Human human)
         {
@@ -89,11 +98,11 @@ namespace hw4
                 .First(x => x.Name == Human.ChildNamingMethod && x.ReturnType == typeof(String));
             try
             {
-                return (String)namingMethod.Invoke(human, null);
+                return namingMethod.Invoke(human, null) as String;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw new NotSupportedException("Child naming is not supported by the human");
+                throw new Exception("Child naming is not supported by the human", e);
             }
         }
 

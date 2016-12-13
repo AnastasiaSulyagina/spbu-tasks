@@ -4,13 +4,13 @@ using World.Services;
 
 namespace World.Factories
 {
-    public sealed class SmartGirlFactory : IHumanFactory
+    public sealed class SmartGirlFactory : GirlFactory
     {
-        public Human CreateHuman(Sex sex = Sex.Female) =>
+        public override Human CreateHuman(Sex sex = Sex.Female) =>
             new SmartGirl(Generator.GenerateName(sex), Generator.GenerateMidName(sex), 
                 Randomizer.GenerateRandomYoungHumanAge());
 
-        public Human CreatePair(Human human)
+        public override Human CreatePair(Human human)
         {
             throw new NotImplementedException();
         }

@@ -18,8 +18,9 @@ namespace hw4
             {
                 throw new ArgumentNullException();
             }
-            attributes =((CoupleAttribute[])Attribute.GetCustomAttributes(humanType, 
-                typeof(CoupleAttribute))).ToList();
+            attributes =(Attribute.GetCustomAttributes(humanType,
+                typeof(CoupleAttribute)) as CoupleAttribute[])
+                .Where(x => x is CoupleAttribute).ToList();
             enumerator = attributes.GetEnumerator();
         }
 

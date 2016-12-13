@@ -5,7 +5,7 @@ namespace World.Creatures
 {
     [Couple("Student", 0.7, "Girl")]
     [Couple("Botan", 0.3, "SmartGirl")]
-    public class Girl : Human
+    public class Girl : Human, IHasMidName
     {
         public Girl(String name, String midName, int age = 0) : base(age, name, Sex.Female)
         {
@@ -15,6 +15,7 @@ namespace World.Creatures
             }
             MidName = midName;
             Color = ConsoleColor.Red;
+            Type = HumanType.Girl;
         }
 
         public String MidName { get; }
